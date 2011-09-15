@@ -1,0 +1,4 @@
+# Makefile definitions for MinGW
+SUBSYSTEM_WINDOWS=-Wl,-subsystem,windows
+X = .exe
+WRES = Rubiks.res
