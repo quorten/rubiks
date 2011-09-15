@@ -1,0 +1,37 @@
+# Platform independent makefile
+
+SHELL = /bin/sh
+
+INCLUDES := $(shell pkg-config --cflags gtkglext-1.0 pangoft2)
+LIBS := $(shell pkg-config --libs gtkglext-1.0)
+
+all: rubiks$(X)
+
+main.o: Vector.h GfxOpenGL.h Rubiks.h main.cpp
+	g++ -g $(INCLUDES) -c main.cpp -o $@
+
+GfxOpenGL.o: Vector.h Plane.h GfxOpenGL.h Rubiks.h GfxOpenGL.cpp
+	g++ -g $(INCLUDES) -c GfxOpenGL.cpp -o $@
+
+Rubiks.o: Vector.h GfxOpenGL.h Rubiks.h Rubiks.cpp
+	g++ -g $(INCLUDES) -c Rubiks.cpp -o $@
+
+ifdef SUBSYSTEM_WINDOWS
+Rubiks.res: Rubiks.rc
+	windres -O coff Rubiks.rc -o $@
+endif
+
+rubiks$(X): main.o GfxOpenGL.o Rubiks.o $(WRES)
+	g++ -g -o $@ $(SUBSYSTEM_WINDOWS) $^ $(LIBS)
+
+install:
+	install rubiks$(X) ~/bin/
+
+uninstall:
+	rm -f ~/bin/rubiks$(X)
+
+clean:
+	rm -f *.o *.res rubiks$(X)
+
+dist-clean: clean
+	rm -f Rubcube.dat
