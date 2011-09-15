@@ -1,0 +1,7 @@
+\newif\ifdvipdfm
+\dvipdfmtrue
+\ifdvipdfm
+\newcommand{\mydriver}{dvipdfm}
+\else
+\newcommand{\mydriver}{dvips}
+\fi
