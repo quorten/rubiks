@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="425"
+   height="112"
+   id="svg2487"
+   sodipodi:version="0.32"
+   inkscape:version="0.46"
+   version="1.0"
+   sodipodi:docname="image3.svg"
+   inkscape:output_extension="org.inkscape.output.svg.inkscape">
+  <defs
+     id="defs2489">
+    <inkscape:perspective
+       sodipodi:type="inkscape:persp3d"
+       inkscape:vp_x="0 : 56 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_z="425 : 56 : 1"
+       inkscape:persp3d-origin="212.5 : 37.333333 : 1"
+       id="perspective19" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     gridtolerance="10000"
+     guidetolerance="10"
+     objecttolerance="10"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="2"
+     inkscape:cx="211.96911"
+     inkscape:cy="64.797592"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1024"
+     inkscape:window-height="712"
+     inkscape:window-x="-4"
+     inkscape:window-y="-4"
+     inkscape:snap-bbox="false"
+     inkscape:object-nodes="false"
+     inkscape:snap-intersection-line-segments="false"
+     inkscape:object-paths="false"
+     inkscape:snap-center="false" />
+  <metadata
+     id="metadata2492">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <rect
+       style="fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect3333"
+       width="102"
+       height="102"
+       x="8.4999981"
+       y="4.9999938" />
+    <g
+       id="g3376"
+       transform="translate(-84.999998,-934.8601)">
+      <rect
+         style="opacity:1;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="rect3349"
+         width="34"
+         height="102"
+         x="127.5"
+         y="939.86011" />
+      <rect
+         style="opacity:1;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="rect3351"
+         width="102"
+         height="34"
+         x="93.5"
+         y="973.86011" />
+      <path
+         id="path3370"
+         d="M 145,1025.3601 L 179,991.36011 L 145,956.36011"
+         style="fill:none;fill-rule:evenodd;stroke:#00ff00;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+      <path
+         transform="matrix(9.9264716e-2,0,0,9.9264716e-2,99.531252,889.12769)"
+         sodipodi:type="arc"
+         style="opacity:1;fill:#00ff00;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:10.07407475;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="path3374"
+         sodipodi:cx="110.5"
+         sodipodi:cy="1024.8601"
+         sodipodi:rx="17"
+         sodipodi:ry="17"
+         d="M 127.5,1024.8601 A 17,17 0 1 1 93.5,1024.8601 A 17,17 0 1 1 127.5,1024.8601 z" />
+      <use
+         x="0"
+         y="0"
+         xlink:href="#path3374"
+         id="use3161"
+         transform="translate(34.499997,-34.500028)"
+         width="425"
+         height="112" />
+      <use
+         height="112"
+         width="425"
+         transform="translate(68.499997,0.4999725)"
+         id="use3163"
+         xlink:href="#path3374"
+         y="0"
+         x="0" />
+      <use
+         x="0"
+         y="0"
+         xlink:href="#path3374"
+         id="use3165"
+         transform="translate(34.499997,34.499962)"
+         width="425"
+         height="112" />
+    </g>
+    <rect
+       y="4.9999938"
+       x="110.50001"
+       height="102"
+       width="102"
+       id="rect3388"
+       style="fill:#008000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+    <rect
+       style="fill:#ffff00;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect3390"
+       width="102"
+       height="102"
+       x="212.5"
+       y="4.9999938" />
+    <rect
+       y="4.9999938"
+       x="314.5"
+       height="102"
+       width="102"
+       id="rect3392"
+       style="fill:#0000ff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#g3376"
+       id="use3394"
+       transform="translate(102,-4.2857141e-6)"
+       width="744.09448"
+       height="2052.3601" />
+    <use
+       height="2052.3601"
+       width="744.09448"
+       transform="translate(204,-4.2857141e-6)"
+       id="use3396"
+       xlink:href="#g3376"
+       y="0"
+       x="0" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#g3376"
+       id="use3398"
+       transform="translate(306,-4.2857141e-6)"
+       width="744.09448"
+       height="2052.3601" />
+  </g>
+</svg>
