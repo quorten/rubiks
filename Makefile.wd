@@ -1,0 +1,22 @@
+# Windows-only MinGW makefile
+
+all: Rubiks.exe
+
+winmain.o: vector.h GfxOpenGL.h Rubiks.h winmain.cpp
+	g++ -D _WINDOWS -c winmain.cpp -o $@
+
+GfxOpenGL.o: vector.h plane.h GfxOpenGL.h Rubiks.h GfxOpenGL.cpp
+	g++ -D _WINDOWS -c GfxOpenGL.cpp -o $@
+
+Rubiks.o: vector.h GfxOpenGL.h Rubiks.h Rubiks.cpp
+	g++ -D _WINDOWS -c Rubiks.cpp -o $@
+
+Rubiks.res: Rubiks.rc
+	windres -O coff Rubiks.rc -o $@
+
+Rubiks.exe: winmain.o GfxOpenGL.o Rubiks.o Rubiks.res
+	g++ -o $@ winmain.o GfxOpenGL.o Rubiks.o Rubiks.res -mwindows \
+	-lopengl32 -lglu32 -lwinmm
+
+clean:
+	rm -f *.o *.res *.exe
