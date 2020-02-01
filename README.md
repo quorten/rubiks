@@ -2,9 +2,9 @@ This is a very simple Rubik's Cube program that is not necessarily as
 efficient in rendering the Rubik's Cube as it could be, especially
 when when bug workarounds are enabled.
 
-In order to build this program, you must have a working GTK+
+In order to build this program, you must have a working GTK+ 2
 environment with pkgconfig and GtkGLExt installed (along with the
-equivalent development packages for GTK+ and GtkGLExt).
+equivalent development packages for GTK+ 2 and GtkGLExt).
 
 To build this program, simply combine the appropriate makefile
 definitions with "Makefile.in" and output the result to "Makefile".
@@ -20,7 +20,7 @@ multiple coding styles meshed together in an unintelligible way.  The
 reason why the code is written in two different styles throughout the
 program is because the old code base used to be a Windows-only OpenGL
 program, while the new code base was made platform-independent by
-switching the wgl and Windows code to GtkGLExt and GTK+.
+switching the wgl and Windows code to GtkGLExt and GTK+ 2.
 
 How To Use
 ----------
