@@ -34,16 +34,16 @@ To twist the Rubik's Cube, you can click and drag on a face to rotate
 that face.  To use the keyboard to control the Rubik's Cube, use the
 following keys:
 
-Setting the current face:
-'q': white
-'a': yellow
-'w': green
-'s': blue
-'e': red
+Setting the current face:  
+'q': white  
+'a': yellow  
+'w': green  
+'s': blue  
+'e': red  
 'd': orange
 
-'r': Rotate the current face counterclockwise
-'f': Rotate the current face clockwise
-'z': Align the Rubik's Cube (if you were using the mouse to twist)
+'r': Rotate the current face counterclockwise  
+'f': Rotate the current face clockwise  
+'z': Align the Rubik's Cube (if you were using the mouse to twist)  
 'n': Wastefully throw away your perfectly good Rubik's Cube and buy a
      new one.  Was it really that bad that you HAD to throw it away?
