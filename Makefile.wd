@@ -1,22 +1,30 @@
 # Windows-only MinGW makefile
+CROSS = i686-w64-mingw32-
+CXX = $(CROSS)g++
+CFLAGS =
+LDFLAGS = -mwindows -static-libgcc -static-libstdc++
+WINDRES = $(CROSS)windres
 
 all: Rubiks.exe
 
-winmain.o: vector.h GfxOpenGL.h Rubiks.h winmain.cpp
-	g++ -D _WINDOWS -c winmain.cpp -o $@
+winmain.o: Vector.h GfxOpenGL.h Rubiks.h winmain.cpp
+	$(CXX) $(CFLAGS) -D _WINDOWS -c winmain.cpp -o $@
 
-GfxOpenGL.o: vector.h plane.h GfxOpenGL.h Rubiks.h GfxOpenGL.cpp
-	g++ -D _WINDOWS -c GfxOpenGL.cpp -o $@
+GfxOpenGL.o: Vector.h Plane.h GfxOpenGL.h Rubiks.h GfxOpenGL.cpp
+	$(CXX) $(CFLAGS) -D _WINDOWS -c GfxOpenGL.cpp -o $@
 
-Rubiks.o: vector.h GfxOpenGL.h Rubiks.h Rubiks.cpp
-	g++ -D _WINDOWS -c Rubiks.cpp -o $@
+Rubiks.o: Vector.h GfxOpenGL.h Rubiks.h Rubiks.cpp
+	$(CXX) $(CFLAGS) -D _WINDOWS -c Rubiks.cpp -o $@
 
-Rubiks.res: Rubiks.rc
-	windres -O coff Rubiks.rc -o $@
+Rubiks-rc.o: Rubiks.rc
+	$(WINDRES) -O coff Rubiks.rc -o $@
 
-Rubiks.exe: winmain.o GfxOpenGL.o Rubiks.o Rubiks.res
-	g++ -o $@ winmain.o GfxOpenGL.o Rubiks.o Rubiks.res -mwindows \
+Rubiks.exe: winmain.o GfxOpenGL.o Rubiks.o Rubiks-rc.o
+	$(CXX) $(LDFLAGS) -o $@ winmain.o GfxOpenGL.o Rubiks.o Rubiks-rc.o \
 	-lopengl32 -lglu32 -lwinmm
 
-clean:
-	rm -f *.o *.res *.exe
+mostlyclean:
+	rm -f *.o *-rc.o
+
+clean: mostlyclean
+	rm -f Rubiks.exe

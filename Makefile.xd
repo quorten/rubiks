@@ -1,0 +1,27 @@
+# Unix-only GLX makefile
+CROSS =
+CXX = $(CROSS)g++
+CFLAGS =
+LDFLAGS =
+X =
+
+all: rubiks$(X)
+
+xmain.o: Vector.h GfxOpenGL.h Rubiks.h xmain.cpp
+	$(CXX) $(CFLAGS) -c xmain.cpp -o $@
+
+GfxOpenGL.o: Vector.h Plane.h GfxOpenGL.h Rubiks.h GfxOpenGL.cpp
+	$(CXX) $(CFLAGS) -c GfxOpenGL.cpp -o $@
+
+Rubiks.o: Vector.h GfxOpenGL.h Rubiks.h Rubiks.cpp
+	$(CXX) $(CFLAGS) -c Rubiks.cpp -o $@
+
+rubiks$(X): xmain.o GfxOpenGL.o Rubiks.o
+	$(CXX) $(LDFLAGS) -o $@ xmain.o GfxOpenGL.o Rubiks.o \
+	-lGL -lGLU -lX11
+
+mostlyclean:
+	rm -f *.o
+
+clean: mostlyclean
+	rm -f rubiks$(X)

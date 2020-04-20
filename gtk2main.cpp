@@ -21,16 +21,38 @@
 #include "Rubiks.h"
 
 static gboolean animate = FALSE;
-bool left_arrow_dwn = false, right_arrow_dwn = false; //Arrow keys
+bool left_arrow_dwn = false, right_arrow_dwn = false; // Arrow keys
 bool up_arrow_dwn = false, dwn_arrow_dwn = false;
 static clock_t last_time = 0;
-GLfloat teapot_scale = 0.0f; //Special easter egg
+GLfloat teapot_scale = 0.0f; // Special easter egg
 
 GfxOpenGL* g_glRender = NULL;
 RubiksCube* g_rubiksCube = NULL;
 
 static void idle_add (GtkWidget *widget);
 static void idle_remove (GtkWidget *widget);
+
+void RubiksSaveErrorDlg()
+{
+	GtkWidget* dialog;
+	dialog = gtk_message_dialog_new (NULL,
+			 GTK_DIALOG_DESTROY_WITH_PARENT, GTK_MESSAGE_INFO,
+			 GTK_BUTTONS_CLOSE, "Your Rubik's Cube could not be saved.");
+	gtk_window_set_title (GTK_WINDOW (dialog), "Error");
+	gtk_dialog_run (GTK_DIALOG (dialog));
+	gtk_widget_destroy (dialog);
+}
+
+void RubiksLoadErrorDlg()
+{
+	GtkWidget* dialog;
+	dialog = gtk_message_dialog_new (NULL,
+			 GTK_DIALOG_DESTROY_WITH_PARENT, GTK_MESSAGE_INFO,
+			 GTK_BUTTONS_CLOSE, "Your saved Rubik's Cube data was invalid and error corrected.\nIt will not be the same as you last had it.");
+	gtk_window_set_title (GTK_WINDOW (dialog), "Information");
+	gtk_dialog_run (GTK_DIALOG (dialog));
+	gtk_widget_destroy (dialog);
+}
 
 static void EnableRenderLoop(GtkWidget* widget)
 {
@@ -107,8 +129,20 @@ expose_event (GtkWidget *widget, GdkEventExpose *event, gpointer data)
 	if (!gdk_gl_drawable_gl_begin (gldrawable, glcontext))
 		return FALSE;
 
-	clock_t this_time = clock();
-	g_glRender->Prepare((float)(last_time - this_time) / CLOCKS_PER_SEC);
+#ifdef G_OS_WIN32
+	/* On Windows, `clock ()' actually measures "wall clock" monotonic
+	   elapsed real time rather than processor time.  Also, this is
+	   easier to compile than `clock_gettime ()' because that comes
+	   from `winpthread.dll' rather than `msvcrt.dll'.  */
+	clock_t this_time = clock ();
+	float dt = (float)(last_time - this_time) / CLOCKS_PER_SEC;
+#else
+	struct timespec tp;
+	clock_gettime(CLOCK_MONOTONIC, &tp);
+	clock_t this_time = tp.tv_sec * 1000 + tp.tv_nsec / 1000000;
+	float dt = (float)(last_time - this_time) / 1000.0f;
+#endif
+	g_glRender->Prepare(dt);
 	last_time = this_time;
 	g_glRender->Render();
 #ifdef IDLE_BUG
@@ -323,7 +357,18 @@ idle_add (GtkWidget *widget)
     {
 		idle_id = g_idle_add_full (GDK_PRIORITY_REDRAW,
 								   (GSourceFunc) idle, widget, NULL);
-		last_time = clock();
+#ifdef G_OS_WIN32
+		/* On Windows, `clock ()' actually measures "wall clock"
+		   monotonic elapsed real time rather than processor time.
+		   Also, this is easier to compile than `clock_gettime ()'
+		   because that comes from `winpthread.dll' rather than
+		   `msvcrt.dll'.  */
+		last_time = clock ();
+#else
+		struct timespec tp;
+		clock_gettime(CLOCK_MONOTONIC, &tp);
+		last_time = tp.tv_sec * 1000 + tp.tv_nsec / 1000000;
+#endif
     }
 }
 

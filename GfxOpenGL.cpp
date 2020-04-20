@@ -1,25 +1,9 @@
-#ifdef _WINDOWS
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-#else
-
-#include <gtk/gtk.h>
-#include <gdk/gdkkeysyms.h>
-
-#include <gtk/gtkgl.h>
-
-#ifdef G_OS_WIN32
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-#endif
-#endif
-
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <math.h>
 
 #ifndef MAX
-#define MAX(a, b) max(a, b)
+#define MAX(a, b) (((a) > (b)) ? (a) : (b))
 #endif
 
 #include "Vector.h"

@@ -1,26 +1,66 @@
-This is a very simple Rubik's Cube program that is not necessarily as
-efficient in rendering the Rubik's Cube as it could be, especially
-when when bug workarounds are enabled.
+Rubik's Cube
+============
 
-In order to build this program, you must have a working GTK+ 2
-environment with pkgconfig and GtkGLExt installed (along with the
-equivalent development packages for GTK+ 2 and GtkGLExt).
+This is a very simple OpenGL Rubik's Cube program that is not
+necessarily as efficient in rendering the Rubik's Cube as it could be,
+especially when when bug workarounds are enabled.
 
-To build this program, simply combine the appropriate makefile
-definitions with "Makefile.in" and output the result to "Makefile".
-Then you can make the program as usual.
+There are multiple ways to build this program, depending on which
+dependencies you want to use:
 
-Note that the program may crash on your system or behave unusually
-when using the keyboard to rotate the Rubik's Cube.  For these two
-problems, try using the preprocessor definitions VARRAY_BUG and
-IDLE_BUG respectively.
+* Windows API + WGL + OpenGL 1.1, this is the dependency-minimal way
+  to compile the software for legacy Microsoft Windows.  Works well on
+  Windows 95/98/2000/ME/NT/XP.
+
+  Use `make -f Makefile.wd CROSS=i686-w64-mingw32-` to compile and set
+  the CROSS variable accordingly for cross-compiling (or empty for
+  native compiling).
+
+* libX11 + GLX + OpenGL 1.1, this is the dependency-minimal way to
+  compile the software for legacy Unix.  It also still works
+  reasonably well on modern Unix, at most requiring only a
+  compatibility layer dependency (XQuartz, XWayland) similar to the
+  addition of a windowing toolkit dependency, but without the breaking
+  changes that come about in newer toolkit versions.
+
+  Use `make -f Makefile.xd` to compile.
+
+* GTK+ 2 + GtkGLExt + OpenGL 1.1, this was a good way to write
+  cross-platform GUI software for a good chunk of time from around the
+  years 2005 - 2015, but due to the scope of breaking changes in GTK+
+  3, GTK+ is no longer liked as a platform by application developers.
+
+  To compile for Windows: `cat mingw.defs Makefile.in >Makefile && make`
+
+  To compile for Unix: `cat posix.defs Makefile.in >Makefile && make`
+
+On Debian-based systems (Ubuntu, Raspbian, etc.), make sure you have
+the required development packages installed, these are the ones that
+have been specifically tested and known to work:
+
+* libx11-dev
+* libgl1-mesa-dev
+* libglu1-mesa-dev
+* pkg-config (optional)
+* libgtk2.0-dev (optional)
+* libgtkglext1-dev (optional)
+
+Note that the program may behave unusually when using the keyboard to
+rotate the Rubik's Cube, though this only ever happened in my testing
+on Ubuntu 11.04.  For this problem, try using the preprocessor
+definitions IDLE_BUG.
 
 As a side note, this program may seem like a crazy disaster of
 multiple coding styles meshed together in an unintelligible way.  The
 reason why the code is written in two different styles throughout the
-program is because the old code base used to be a Windows-only OpenGL
-program, while the new code base was made platform-independent by
-switching the wgl and Windows code to GtkGLExt and GTK+ 2.
+program is because the original code base used to be a Windows-only
+OpenGL program, while the new code base was written for Unix, first as
+GtkGLExt and GTK+ 2 for a short semblance of cross-platform
+capability, and finally adding a GLX implementation for
+dependency-minimal compiles on Unix.  Why did it take so long for me
+to add the GLX implementation?  I'll tell you why: Do you have any
+idea how hard it is to navigate the documentation on Xlib?  It's a
+total pain compared to Windows API, GTK+, and anything else modern!
 
 How To Use
 ----------

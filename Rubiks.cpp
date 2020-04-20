@@ -1,20 +1,3 @@
-#ifdef _WINDOWS
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-#else
-
-#include <gtk/gtk.h>
-#include <gdk/gdkkeysyms.h>
-
-#include <gtk/gtkgl.h>
-
-#ifdef G_OS_WIN32
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-#endif
-
-#endif
-
 #include <GL/gl.h>
 #include <cstdio>
 #include <cstring>
@@ -25,6 +8,10 @@
 #include "Rubiks.h"
 
 extern GfxOpenGL* g_glRender;
+
+// Platform-dependent GUI dialog display functions.
+void RubiksSaveErrorDlg();
+void RubiksLoadErrorDlg();
 
 RubiksCube::RubiksCube()
 {
@@ -45,19 +32,7 @@ RubiksCube::~RubiksCube()
 		fclose(fp);
 	}
 	else
-#ifdef _WINDOWS
-		MessageBox(NULL, "Your Rubik's Cube could not be saved.", NULL, MB_OK);
-#else
-	{
-		GtkWidget* dialog;
-		dialog = gtk_message_dialog_new (NULL,
-				 GTK_DIALOG_DESTROY_WITH_PARENT, GTK_MESSAGE_INFO,
-				 GTK_BUTTONS_CLOSE, "Your Rubik's Cube could not be saved.");
-		gtk_window_set_title (GTK_WINDOW (dialog), "Error");
-		gtk_dialog_run (GTK_DIALOG (dialog));
-		gtk_widget_destroy (dialog);
-	}
-#endif
+		RubiksSaveErrorDlg();
 
 	//Change GL state back
 	glDisableClientState(GL_COLOR_ARRAY);
@@ -198,19 +173,7 @@ void RubiksCube::Init()
 
 		rubiksReady = true;
 		if (correctCube != A_OK)
-#ifdef _WINDOWS
-			MessageBox(NULL, "Your saved Rubik's Cube data was invalid and error corrected.\nIt will not be the same as you last had it.", "Information", MB_OK);
-#else
-	{
-		GtkWidget* dialog;
-		dialog = gtk_message_dialog_new (NULL,
-				 GTK_DIALOG_DESTROY_WITH_PARENT, GTK_MESSAGE_INFO,
-				 GTK_BUTTONS_CLOSE, "Your saved Rubik's Cube data was invalid and error corrected.\nIt will not be the same as you last had it.");
-		gtk_window_set_title (GTK_WINDOW (dialog), "Information");
-		gtk_dialog_run (GTK_DIALOG (dialog));
-		gtk_widget_destroy (dialog);
-	}
-#endif
+			RubiksLoadErrorDlg();
 #undef A_OK
 #undef FACES_FAIL
 #undef CORNERS_FAIL

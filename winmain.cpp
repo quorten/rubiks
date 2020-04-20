@@ -1,20 +1,22 @@
+// Windows API + WGL main startup for the Rubik's Cube.
 #define WIN32_LEAN_AND_MEAN
 #define WIN32_EXTRA_LEAN
 
 #include <windows.h>
-#include <GL/gl.h>
 #include <mmsystem.h>
+#include <GL/gl.h>
 
-#include "vector.h"
+#include "Vector.h"
 #include "GfxOpenGL.h"
 #include "Rubiks.h"
 
 bool exiting = false;
+bool drawFrame = false;
 bool renderLoop = false;
 bool leftArrowDwn = false, rightArrowDwn = false; //Arrow keys
 bool upArrowDwn = false, dwnArrowDwn = false;
 const int windowWidth = 800;
-const int long windowHeight = 600;
+const int windowHeight = 600;
 const int windowBits = 32;
 
 bool fullscreen = false;
@@ -23,6 +25,20 @@ int lastTime;
 
 GfxOpenGL* g_glRender = NULL;
 RubiksCube* g_rubiksCube = NULL;
+
+void RubiksSaveErrorDlg()
+{
+	MessageBox(NULL, "Your Rubik's Cube could not be saved.", NULL,
+		MB_OK | MB_ICONERROR);
+}
+
+void RubiksLoadErrorDlg()
+{
+	MessageBox(NULL,
+		"Your saved Rubik's Cube data was invalid and error corrected.\n"
+		"It will not be the same as you last had it.",
+		"Information", MB_OK | MB_ICONEXCLAMATION);
+}
 
 void SetupPixelFormat(HDC hDC)
 {
@@ -72,10 +88,8 @@ inline void DisableRenderLoop()
 
 LRESULT CALLBACK MainWindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-	static HDC hDC;
 	static HGLRC hRC;
 	static bool lBtnDown = false, rBtnDown = false;
-	int thisTime;
 	int height, width;
 
 	// dispatch messages
@@ -86,7 +100,12 @@ LRESULT CALLBACK MainWindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 		SetupPixelFormat(hDC);
 		//SetupPalette();
 		hRC = wglCreateContext(hDC);
-		wglMakeCurrent(hDC, hRC);
+		if (hRC == NULL)
+			MessageBox(NULL, "Failed to create OpenGL context.",
+				NULL, MB_OK | MB_ICONERROR);
+		if (!wglMakeCurrent(hDC, hRC))
+			MessageBox(NULL, "Failed to set OpenGL context.",
+				NULL, MB_OK | MB_ICONERROR);
 		PostMessage(hWnd, WM_PAINT, 0, 0);
 		break;
 
@@ -97,6 +116,7 @@ LRESULT CALLBACK MainWindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 		// deselect rendering context and delete it
 		wglMakeCurrent(hDC, NULL);
 		wglDeleteContext(hRC);
+		ReleaseDC(hWnd, hDC);
 
 		// send WM_QUIT to message queue
 		PostQuitMessage(0);
@@ -124,13 +144,7 @@ LRESULT CALLBACK MainWindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 		break;
 
 	case WM_PAINT:				// paint
-		thisTime = timeGetTime();
-
-		g_glRender->Prepare((float)(thisTime - lastTime)/1000.0f);
-		lastTime = thisTime;
-
-		g_glRender->Render();
-		SwapBuffers(hDC);
+		drawFrame = true;
 		break;
 
 	case WM_LBUTTONDOWN:		// left mouse button
@@ -284,7 +298,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	DWORD		 dwExStyle;		// Window Extended Style
 	DWORD		 dwStyle;			// Window Style
 	RECT		 windowRect;
-	lastTime = timeGetTime();
 
 	g_glRender = new GfxOpenGL;
 	g_rubiksCube = new RubiksCube;
@@ -310,7 +323,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	// register the windows class
 	if (!RegisterClassEx(&windowClass))
+	{
+		delete g_rubiksCube;
+		delete g_glRender;
 		return 0;
+	}
 
 	if (fullscreen)								// fullscreen?
 	{
@@ -335,7 +352,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	{
 		dwExStyle=WS_EX_APPWINDOW;					// Window Extended Style
 		dwStyle=WS_POPUP;						// Windows Style
-		ShowCursor(FALSE);						// Hide Mouse Pointer
 	}
 	else
 	{
@@ -351,7 +367,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		"Rubik's Cube", // app name
 		dwStyle | WS_CLIPCHILDREN |
 		WS_CLIPSIBLINGS,
-		0, 0,								 // x,y coordinate
+		CW_USEDEFAULT, CW_USEDEFAULT,				 // x,y coordinate
 		windowRect.right - windowRect.left,
 		windowRect.bottom - windowRect.top, // width, height
 		NULL,											 // handle to parent
@@ -359,72 +375,53 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		hInstance,									// application instance
 		NULL);											// no extra params
 
-	hDC = GetDC(hwnd);
-
 	// check if window creation failed (hwnd would equal NULL)
 	if (!hwnd)
-	{
-		delete g_glRender;
-		delete g_rubiksCube;
-		return 0;
-	}
+		goto cleanup;
 
 	ShowWindow(hwnd, SW_SHOW);			// display the window
 	UpdateWindow(hwnd);					// update the window
 
 	if (!g_glRender->Init())
-	{
-		delete g_glRender;
-		delete g_rubiksCube;
-		return 0;
-	}
+		goto cleanup;
 
 	g_rubiksCube->Init();
 
-	int thisTime;
+	drawFrame = true; // draw the first frame
 	while (!exiting)
 	{
-		if (renderLoop == true)
+		if (drawFrame || renderLoop)
 		{
-			thisTime = timeGetTime();
+			int thisTime = timeGetTime();
 
 			g_glRender->Prepare((float)(thisTime - lastTime)/1000.0f);
 			lastTime = thisTime;
-			
+
 			g_glRender->Render();
 			SwapBuffers(hDC);
-			
-			while (PeekMessage (&msg, NULL, 0, 0, PM_NOREMOVE))
+			drawFrame = false;
+		}
+
+		while (!exiting && (!(drawFrame || renderLoop) ||
+							PeekMessage (&msg, NULL, 0, 0, PM_NOREMOVE)))
+		{
+			if (GetMessage (&msg, NULL, 0, 0))
 			{
-				if (!GetMessage (&msg, NULL, 0, 0))
-				{
-					exiting = true;
-					break;
-				}
-				
 				TranslateMessage (&msg);
 				DispatchMessage (&msg);
-			}
-		}
-		else
-		{
-			if (GetMessage(&msg, NULL, 0, 0))
-			{
-				TranslateMessage(&msg);
-				DispatchMessage(&msg);
 			}
 			else
 				exiting = true;
 		}
 	}
 
+cleanup:
 	delete g_rubiksCube;
 	delete g_glRender;
 
 	if (fullscreen)
 	{
 		ChangeDisplaySettings(NULL,0);					// If So Switch Back To The Desktop
-		ShowCursor(TRUE);						// Show Mouse Pointer
 	}
 
 	return (int)msg.wParam;

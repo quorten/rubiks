@@ -5,24 +5,29 @@ SHELL = /bin/sh
 INCLUDES := $(shell pkg-config --cflags gtkglext-1.0 pangoft2)
 LIBS := $(shell pkg-config --libs gtkglext-1.0)
 
+CXX=$(CROSS)g++
+CFLAGS=-g
+LDFLAGS=
+WINDRES=$(CROSS)windres
+
 all: rubiks$(X)
 
-main.o: Vector.h GfxOpenGL.h Rubiks.h main.cpp
-	g++ -g $(INCLUDES) -c main.cpp -o $@
+main.o: Vector.h GfxOpenGL.h Rubiks.h gtk2main.cpp
+	$(CXX) $(CFLAGS) $(INCLUDES) -c gtk2main.cpp -o $@
 
 GfxOpenGL.o: Vector.h Plane.h GfxOpenGL.h Rubiks.h GfxOpenGL.cpp
-	g++ -g $(INCLUDES) -c GfxOpenGL.cpp -o $@
+	$(CXX) $(CFLAGS) $(INCLUDES) -c GfxOpenGL.cpp -o $@
 
 Rubiks.o: Vector.h GfxOpenGL.h Rubiks.h Rubiks.cpp
-	g++ -g $(INCLUDES) -c Rubiks.cpp -o $@
+	$(CXX) $(CFLAGS) $(INCLUDES) -c Rubiks.cpp -o $@
 
 ifdef SUBSYSTEM_WINDOWS
-Rubiks.res: Rubiks.rc
-	windres -O coff Rubiks.rc -o $@
+Rubiks-rc.o: Rubiks.rc
+	$(WINDRES) -O coff Rubiks.rc -o $@
 endif
 
 rubiks$(X): main.o GfxOpenGL.o Rubiks.o $(WRES)
-	g++ -g -o $@ $(SUBSYSTEM_WINDOWS) $^ $(LIBS)
+	$(CXX) $(CFLAGS) -o $@ $(LDFLAGS) $(SUBSYSTEM_WINDOWS) $^ $(LIBS)
 
 install:
 	install rubiks$(X) ~/bin/
@@ -30,8 +35,11 @@ install:
 uninstall:
 	rm -f ~/bin/rubiks$(X)
 
-clean:
-	rm -f *.o *.res rubiks$(X)
+mostlyclean:
+	rm -f *.o *-rc.o rubiks$(X)
+
+clean: mostlyclean
+	rm -f rubiks$(X)
 
 dist-clean: clean
 	rm -f Rubcube.dat
