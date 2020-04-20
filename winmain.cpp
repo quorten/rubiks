@@ -362,7 +362,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	AdjustWindowRectEx(&windowRect, dwStyle, FALSE, dwExStyle);		// Adjust Window To True Requested Size
 
 	// class registered, so now create our window
-	hwnd = CreateWindowEx(NULL,	 // extended style
+	hwnd = CreateWindowEx(0,	 // extended style
 		"GLClass",									// class name
 		"Rubik's Cube", // app name
 		dwStyle | WS_CLIPCHILDREN |

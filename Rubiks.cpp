@@ -1,3 +1,11 @@
+#ifdef _WINDOWS
+/* MSVC++ 6 must have <windows.h> included before OpenGL headers or
+   else compile errors will result.  */
+#define WIN32_LEAN_AND_MEAN
+#define WIN32_EXTRA_LEAN
+#include <windows.h>
+#endif
+
 #include <GL/gl.h>
 #include <cstdio>
 #include <cstring>
@@ -43,10 +51,11 @@ RubiksCube::~RubiksCube()
 void RubiksCube::NewRubiksCube()
 {
 	memset(faceRotation, 0, sizeof(faceRotation));
-	for (unsigned i = 0; i < 8; i++)
+	unsigned i;
+	for (i = 0; i < 8; i++)
 		corners[i] = (cornerID)i;
 	memset(cornerRot, 0, sizeof(cornerRot));
-	for (unsigned i = 0; i < 12; i++)
+	for (i = 0; i < 12; i++)
 		edges[i] = (edgeID)i;
 	memset(edgeRot, 0, sizeof(edgeRot));
 }
@@ -81,26 +90,27 @@ void RubiksCube::Init()
 #define EDGEROT_FAIL 32
 		unsigned correctCube = A_OK;
 
-		for (unsigned i = 0; i < 6; i++)
+		unsigned i;
+		for (i = 0; i < 6; i++)
 		{
 			if (faceRotation[i] <= -45.0f)
 			{
 				double intPart; //Temporary memory place holder
 				faceRotation[i] /= 45.0f;
-				faceRotation[i] = modf(faceRotation[i], &intPart) * 45.0f;
+				faceRotation[i] = (float)modf(faceRotation[i], &intPart) * 45.0f;
 				correctCube |= FACES_FAIL;
 			}
 			if (faceRotation[i] > 45.0f)
 			{
 				double intPart; //Temporary memory place holder
 				faceRotation[i] /= 45.0f;
-				faceRotation[i] = modf(faceRotation[i], &intPart) * 45.0f;
+				faceRotation[i] = (float)modf(faceRotation[i], &intPart) * 45.0f;
 				correctCube |= FACES_FAIL;
 			}
 		}
 
 		bool checklist[12] = { false, false, false, false, false, false, false, false, false, false, false, false };
-		for (unsigned i = 0; i < 8; i++)
+		for (i = 0; i < 8; i++)
 		{
 			if (corners[i] > 7)
 				correctCube |= CORNERS_FAIL;
@@ -109,7 +119,7 @@ void RubiksCube::Init()
 		}
 		if (correctCube & CORNERS_FAIL)
 		{
-			for (unsigned i = 0; i < 8; i++)
+			for (i = 0; i < 8; i++)
 			{
 				if (corners[i] > 7)
 				{
@@ -126,7 +136,7 @@ void RubiksCube::Init()
 			}
 		}
 
-		for (unsigned i = 0; i < 8; i++)
+		for (i = 0; i < 8; i++)
 		{
 			if (cornerRot[i] > 2)
 			{
@@ -136,7 +146,7 @@ void RubiksCube::Init()
 		}
 
 		memset(checklist, 0, sizeof(checklist));
-		for (unsigned i = 0; i < 12; i++)
+		for (i = 0; i < 12; i++)
 		{
 			if (edges[i] > 11)
 				correctCube |= EDGES_FAIL;
@@ -145,7 +155,7 @@ void RubiksCube::Init()
 		}
 		if (correctCube & EDGES_FAIL)
 		{
-			for (unsigned i = 0; i < 12; i++)
+			for (i = 0; i < 12; i++)
 			{
 				if (edges[i] > 11)
 				{
@@ -162,7 +172,7 @@ void RubiksCube::Init()
 			}
 		}
 
-		for (unsigned i = 0; i < 12; i++)
+		for (i = 0; i < 12; i++)
 		{
 			if (edgeRot[i] > 1)
 			{
@@ -266,7 +276,8 @@ void RubiksCube::Render()
 								{-2.0f, 0.0f, 0.0f}, {0.0f, 2.0f, 0.0f}, {0.0f, -2.0f, 0.0f} };
 	GLfloat faceRotAxes[6][4] = { {0.0f, 0.0f, 0.0f, 0.0f}, {180.0f, 0.0f, 1.0f, 0.0f}, {90.0f, 0.0f, 1.0f, 0.0f},
 								{-90.0f, 0.0f, 1.0f, 0.0f}, {-90.0f, 1.0f, 0.0f, 0.0f}, {90.0f, 1.0f, 0.0f, 0.0f} };
-	for (unsigned i = 0; i < 6; i++)
+	unsigned i;
+	for (i = 0; i < 6; i++)
 	{
 		glPushMatrix();
 		SetFaceColors(blockColors, i);
@@ -293,7 +304,7 @@ void RubiksCube::Render()
 	GLfloat cnrTrans[8][3] = { {2.0f, 2.0f, 2.0f}, {-2.0f, 2.0f, 2.0f}, {-2.0f, -2.0f, 2.0f}, {2.0f, -2.0f, 2.0f},
 								{2.0f, 2.0f, 2.0f}, {-2.0f, 2.0f, 2.0f}, {-2.0f, -2.0f, 2.0f}, {2.0f, -2.0f, 2.0f} };
 	GLfloat curRotSpot = 0.0f; //Specifies where to rotate to draw the current corner on either the front or back face
-	for (unsigned i = 0; i < 8; i++)
+	for (i = 0; i < 8; i++)
 	{
 		glPushMatrix();
 		SetCornerColors(blockColors, i);
@@ -319,7 +330,7 @@ void RubiksCube::Render()
 	curRotSpot = -180.0f; //Specifies where to rotate to draw the current edge on the current face
 	GLfloat curFaceRot = 0.0f; //Specifies how to rotate to get to the current face
 	SET_BLACK(18);
-	for (unsigned i = 0; i < 12; i++)
+	for (i = 0; i < 12; i++)
 	{
 		glPushMatrix();
 		SetEdgeColors(blockColors, i);
@@ -380,22 +391,22 @@ void RubiksCube::RotateFace(int x, int y)
 	switch (currentFace)
 	{
 	case WHITE:
-		ang1 = atan2(newPick.y, newPick.x), ang2 = atan2(oldPick.y, oldPick.x);
+		ang1 = atan2f(newPick.y, newPick.x), ang2 = atan2f(oldPick.y, oldPick.x);
 		break;
 	case YELLOW:
-		ang1 = atan2(oldPick.y, oldPick.x), ang2 = atan2(newPick.y, newPick.x);
+		ang1 = atan2f(oldPick.y, oldPick.x), ang2 = atan2f(newPick.y, newPick.x);
 		break;
 	case GREEN:
-		ang1 = atan2(oldPick.y, oldPick.z), ang2 = atan2(newPick.y, newPick.z);
+		ang1 = atan2f(oldPick.y, oldPick.z), ang2 = atan2f(newPick.y, newPick.z);
 		break;
 	case BLUE:
-		ang1 = atan2(newPick.y, newPick.z), ang2 = atan2(oldPick.y, oldPick.z);
+		ang1 = atan2f(newPick.y, newPick.z), ang2 = atan2f(oldPick.y, oldPick.z);
 		break;
 	case RED:
-		ang1 = atan2(oldPick.z, oldPick.x), ang2 = atan2(newPick.z, newPick.x);
+		ang1 = atan2f(oldPick.z, oldPick.x), ang2 = atan2f(newPick.z, newPick.x);
 		break;
 	case ORANGE:
-		ang1 = atan2(newPick.z, newPick.x), ang2 = atan2(oldPick.z, oldPick.x);
+		ang1 = atan2f(newPick.z, newPick.x), ang2 = atan2f(oldPick.z, oldPick.x);
 		break;
 	}
 	if (ang1 > 0.0f && ang2 < 0.0f || ang1 < 0.0f && ang2 > 0.0f)

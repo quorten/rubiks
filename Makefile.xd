@@ -1,27 +1,30 @@
-# Unix-only GLX makefile
+# Unix-only GLX -*- makefile -*-
 CROSS =
 CXX = $(CROSS)g++
 CFLAGS =
 LDFLAGS =
 X =
+LIBS = -lGL -lGLU -lX11
 
 all: rubiks$(X)
 
-xmain.o: Vector.h GfxOpenGL.h Rubiks.h xmain.cpp
-	$(CXX) $(CFLAGS) -c xmain.cpp -o $@
+xmain.o: xmain.cpp Vector.h GfxOpenGL.h Rubiks.h
+	$(CXX) $(CFLAGS) -c $< -o $@
 
-GfxOpenGL.o: Vector.h Plane.h GfxOpenGL.h Rubiks.h GfxOpenGL.cpp
-	$(CXX) $(CFLAGS) -c GfxOpenGL.cpp -o $@
+GfxOpenGL.o: GfxOpenGL.cpp Vector.h Plane.h GfxOpenGL.h Rubiks.h
+	$(CXX) $(CFLAGS) -c $< -o $@
 
-Rubiks.o: Vector.h GfxOpenGL.h Rubiks.h Rubiks.cpp
-	$(CXX) $(CFLAGS) -c Rubiks.cpp -o $@
+Rubiks.o: Rubiks.cpp Vector.h GfxOpenGL.h Rubiks.h
+	$(CXX) $(CFLAGS) -c $< -o $@
 
 rubiks$(X): xmain.o GfxOpenGL.o Rubiks.o
-	$(CXX) $(LDFLAGS) -o $@ xmain.o GfxOpenGL.o Rubiks.o \
-	-lGL -lGLU -lX11
+	$(CXX) $(LDFLAGS) -o $@ $^ $(LIBS)
 
 mostlyclean:
 	rm -f *.o
 
 clean: mostlyclean
 	rm -f rubiks$(X)
+
+distclean: clean
+	rm -f Rubcube.dat

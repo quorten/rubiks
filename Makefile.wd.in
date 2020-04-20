@@ -1,0 +1,26 @@
+# Windows-only MinGW and MSVC -*- makefile -*-
+
+all: Rubiks.exe
+
+.cpp$(O):
+	$(CXX) $(CFLAGS) -D _WINDOWS -c $< -o $@
+
+winmain$(O): winmain.cpp Vector.h GfxOpenGL.h Rubiks.h
+GfxOpenGL$(O): GfxOpenGL.cpp Vector.h Plane.h GfxOpenGL.h Rubiks.h
+Rubiks$(O): Rubiks.cpp Vector.h GfxOpenGL.h Rubiks.h
+
+Rubiks$(RCO): Rubiks.rc
+	$(WINDRES) $(RESOUT) Rubiks.rc
+
+Rubiks.exe: winmain$(O) GfxOpenGL$(O) Rubiks$(O) Rubiks$(RCO)
+	$(LINK) $(LDFLAGS) $(LDO)$@ $(ALLDEPS) $(LIBS)
+
+mostlyclean:
+	$(RMF) *$(O)
+	$(RMF) *$(RCO)
+
+clean: mostlyclean
+	$(RMF) Rubiks.exe
+
+distclean: clean
+	$(RMF) Rubcube.dat

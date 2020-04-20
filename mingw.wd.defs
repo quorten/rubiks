@@ -1,0 +1,14 @@
+# MinGW definitions for Windows-dependent Makefile.wd.
+CROSS = i686-w64-mingw32-
+O = .o
+RCO = -rc.o
+ALLDEPS = $^
+CXX = $(CROSS)g++
+LINK = $(CROSS)g++
+CFLAGS =
+LDFLAGS = -mwindows -static-libgcc -static-libstdc++
+LDO = -o
+LIBS = -lopengl32 -lglu32 -lwinmm
+WINDRES = $(CROSS)windres -O coff
+RESOUT = -o $@
+RMF = rm -f

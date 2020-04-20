@@ -1,0 +1,3 @@
+# Windows-dependent makefile for MSVC.
+!include "msvc.wd.defs"
+!include "Makefile.wd.in"

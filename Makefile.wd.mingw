@@ -1,0 +1,3 @@
+# Windows-dependent makefile for MinGW.
+include mingw.wd.defs
+include Makefile.wd.in

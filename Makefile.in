@@ -12,18 +12,18 @@ WINDRES=$(CROSS)windres
 
 all: rubiks$(X)
 
-main.o: Vector.h GfxOpenGL.h Rubiks.h gtk2main.cpp
-	$(CXX) $(CFLAGS) $(INCLUDES) -c gtk2main.cpp -o $@
+main.o: gtk2main.cpp Vector.h GfxOpenGL.h Rubiks.h
+	$(CXX) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
-GfxOpenGL.o: Vector.h Plane.h GfxOpenGL.h Rubiks.h GfxOpenGL.cpp
-	$(CXX) $(CFLAGS) $(INCLUDES) -c GfxOpenGL.cpp -o $@
+GfxOpenGL.o: GfxOpenGL.cpp Vector.h Plane.h GfxOpenGL.h Rubiks.h
+	$(CXX) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
-Rubiks.o: Vector.h GfxOpenGL.h Rubiks.h Rubiks.cpp
-	$(CXX) $(CFLAGS) $(INCLUDES) -c Rubiks.cpp -o $@
+Rubiks.o: Rubiks.cpp Vector.h GfxOpenGL.h Rubiks.h
+	$(CXX) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 ifdef SUBSYSTEM_WINDOWS
 Rubiks-rc.o: Rubiks.rc
-	$(WINDRES) -O coff Rubiks.rc -o $@
+	$(WINDRES) -O coff $< -o $@
 endif
 
 rubiks$(X): main.o GfxOpenGL.o Rubiks.o $(WRES)
@@ -41,5 +41,5 @@ mostlyclean:
 clean: mostlyclean
 	rm -f rubiks$(X)
 
-dist-clean: clean
+distclean: clean
 	rm -f Rubcube.dat

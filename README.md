@@ -10,18 +10,28 @@ dependencies you want to use:
 
 * Windows API + WGL + OpenGL 1.1, this is the dependency-minimal way
   to compile the software for legacy Microsoft Windows.  Works well on
-  Windows 95/98/2000/ME/NT/XP.
+  Windows 95/98/2000/ME/NT/XP/Vista/7/8/10, or pretty much every
+  version of Windows newer than Windows 3.1.
 
-  Use `make -f Makefile.wd CROSS=i686-w64-mingw32-` to compile and set
-  the CROSS variable accordingly for cross-compiling (or empty for
-  native compiling).
+  Use `make -f Makefile.wd.mingw CROSS=i686-w64-mingw32-` to compile
+  and set the CROSS variable accordingly for cross-compiling (or empty
+  for native compiling).
+
+  For your entertainment, retro fans, there is also support for
+  compiling with MSVC++ 6.  Use `nmake -f Makefile.wd.msvc` to
+  compile.  This should also work just as well on any newer version of
+  MSVC.
 
 * libX11 + GLX + OpenGL 1.1, this is the dependency-minimal way to
-  compile the software for legacy Unix.  It also still works
-  reasonably well on modern Unix, at most requiring only a
-  compatibility layer dependency (XQuartz, XWayland) similar to the
-  addition of a windowing toolkit dependency, but without the breaking
-  changes that come about in newer toolkit versions.
+  compile the software for legacy Unix.  In theory you can go back to
+  1992 with a suitable proprietary Unix, but in practice you'll only
+  find reasonable support on GNU/Linux starting in the year 2000.
+
+  It also still works reasonably well on modern Unix, at most
+  requiring only a compatibility layer dependency (XQuartz, XWayland)
+  similar to the addition of a windowing toolkit dependency, but
+  without the breaking changes that come about in newer toolkit
+  versions.
 
   Use `make -f Makefile.xd` to compile.
 

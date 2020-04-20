@@ -1,3 +1,11 @@
+#ifdef _WINDOWS
+/* MSVC++ 6 must have <windows.h> included before OpenGL headers or
+   else compile errors will result.  */
+#define WIN32_LEAN_AND_MEAN
+#define WIN32_EXTRA_LEAN
+#include <windows.h>
+#endif
+
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <math.h>
@@ -136,7 +144,7 @@ void GfxOpenGL::MouseRotate(int xScr, int yScr, bool firstTime)
 	{
 		oldX = x;
 		oldY = y;
-		oldZ = RAD2DEG(atan2(y, x));
+		oldZ = RAD2DEG(atan2f(y, x));
 	}
 	else
 	{
@@ -146,12 +154,12 @@ void GfxOpenGL::MouseRotate(int xScr, int yScr, bool firstTime)
 		oldY = y;
 		float rotX = dy * -180;
 		float rotY = dx * 180;
-		float rotZ = RAD2DEG(atan2(y, x));
+		float rotZ = RAD2DEG(atan2f(y, x));
 		if (rotZ > 0.0f && oldZ < 0.0f || rotZ < 0.0f && oldZ > 0.0f)
 			rotZ += oldZ;
 		else
 			rotZ -= oldZ;
-		oldZ = RAD2DEG(atan2(y, x));
+		oldZ = RAD2DEG(atan2f(y, x));
 		float blend = sqrtf(x * x + y * y);
 		rotX = rotX * MAX((1.0f - blend), 0.0f);
 		rotY = rotY * MAX((1.0f - blend), 0.0f);
@@ -192,7 +200,8 @@ void GfxOpenGL::Get3DPick(int x, int y, unsigned& pickedFace, Point& finalPick)
 
 	//PLANE CLIPPING!
 	GLdouble clipVec[3] = { 0.0, 0.0, 0.0 };
-	for (unsigned i = 0; i < 6; i++)
+	unsigned  i;
+	for (i = 0; i < 6; i++)
 	{
 		for (unsigned j = 0; j < 3; j++)
 		{
@@ -206,7 +215,7 @@ void GfxOpenGL::Get3DPick(int x, int y, unsigned& pickedFace, Point& finalPick)
 	}
 
 	//INTERSECTIONS!
-	for (unsigned i = 0; i < 6; i++)
+	for (i = 0; i < 6; i++)
 	{
 		if (checklist[i] == false)
 			continue;
@@ -222,7 +231,7 @@ void GfxOpenGL::Get3DPick(int x, int y, unsigned& pickedFace, Point& finalPick)
 	//Just pick the closet point on the surface
 	float closest[3] = { 0.0f, 0.0f, -300.0f };
 	//float transClosest[3] = { 0.0f, 0.0f, -300.0f }; //Transformed closest point
-	for (unsigned i = 0; i < 6; i++)
+	for (i = 0; i < 6; i++)
 	{
 		if (checklist[i] == false)
 			continue;
