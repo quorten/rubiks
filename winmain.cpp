@@ -100,12 +100,7 @@ LRESULT CALLBACK MainWindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 		SetupPixelFormat(hDC);
 		//SetupPalette();
 		hRC = wglCreateContext(hDC);
-		if (hRC == NULL)
-			MessageBox(NULL, "Failed to create OpenGL context.",
-				NULL, MB_OK | MB_ICONERROR);
-		if (!wglMakeCurrent(hDC, hRC))
-			MessageBox(NULL, "Failed to set OpenGL context.",
-				NULL, MB_OK | MB_ICONERROR);
+		wglMakeCurrent(hDC, hRC);
 		PostMessage(hWnd, WM_PAINT, 0, 0);
 		break;
 
