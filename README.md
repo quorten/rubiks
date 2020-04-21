@@ -97,3 +97,28 @@ Setting the current face:
 'z': Align the Rubik's Cube (if you were using the mouse to twist)  
 'n': Wastefully throw away your perfectly good Rubik's Cube and buy a
      new one.  Was it really that bad that you HAD to throw it away?
+
+Other notes
+-----------
+
+Why does the Windows code change the display resolution in fullscreen
+mode?  Back in the era of the '90's PC revolution and extending a
+little into the early 2000s, most computers had what are called
+"multisync CRT monitors."  "What's that?" you ask.  Unlike modern flat
+panel displays that are manufactured to a fixed resolution, CRT
+monitors have a margin for operational cleverness.  Although the
+shadow mask is manufactured to a fixed resolution, the electron beam
+scanning circuitry can be easily programmed to scan the display at
+different rates, and that's where the cleverness comes in.
+
+In order to display a different resolution of video, it is only
+necessary to change the rate at which _horizontal scanning_ is
+performed at, and the vertical scan rate can remain the same.  The CRT
+beam scanning will then automagically do the rest of the work required
+to rescale the lower-resolution image, unlike modern flat panel
+displays that have to do all the scaling via digital computation.
+This was an obvious boon to the video performance of earlier PCs which
+were slow at all but the simplest of graphics operations, so it was
+typical to run three-dimensional games at a lower resolution than
+would be used for typical two-dimensional desktop computing so that
+they could enjoy a higher frame rate for the animated graphics.

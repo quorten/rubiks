@@ -10,7 +10,7 @@ GfxOpenGL$(O): GfxOpenGL.cpp Vector.h Plane.h GfxOpenGL.h Rubiks.h
 Rubiks$(O): Rubiks.cpp Vector.h GfxOpenGL.h Rubiks.h
 
 Rubiks$(RCO): Rubiks.rc
-	$(WINDRES) $(RESOUT) Rubiks.rc
+	$(WINDRES) $(RESOUT) $@ Rubiks.rc
 
 Rubiks.exe: winmain$(O) GfxOpenGL$(O) Rubiks$(O) Rubiks$(RCO)
 	$(LINK) $(LDFLAGS) $(LDO)$@ $(ALLDEPS) $(LIBS)

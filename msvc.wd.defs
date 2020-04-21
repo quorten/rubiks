@@ -10,5 +10,5 @@ LDO = -out:
 GUILIBS = kernel32.lib user32.lib gdi32.lib
 LIBS = $(GUILIBS) opengl32.lib glu32.lib winmm.lib
 WINDRES = rc -r
-RESOUT =
+RESOUT = -fo
 RMF = del

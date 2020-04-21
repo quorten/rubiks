@@ -8,6 +8,7 @@
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <X11/XKBlib.h>
+#include <X11/cursorfont.h>
 #include <GL/gl.h>
 #include <GL/glx.h>
 
@@ -270,6 +271,7 @@ main (int argc, char *argv[])
 	unsigned long mask;
 	Window mywindow;
 	char title[] = "Rubik's Cube";
+	Cursor mycursor;
 
 	GLXContext hRC;
 
@@ -327,14 +329,16 @@ main (int argc, char *argv[])
 	// Set the window title and hints.
 	XSetStandardProperties (mydisplay, mywindow, title, title,
 							None, argv, argc, &myhint);
+	/* Set the window cursor (only necessary if running without a
+	   window manager).  */
+	mycursor = XCreateFontCursor (mydisplay, XC_left_ptr);
+	XDefineCursor (mydisplay, mywindow, mycursor);
 	// Configure the WM_DELETE_WINDOW message.
 	XSetWMProtocols(mydisplay, mywindow, &wmDeleteMessage, 1);
 
 	// TODO FIXME: Add support for fullscreen.
 	/* if (fullscreen)
 		no_border (mydisplay, mywindow); */
-
-	XMapRaised (mydisplay, mywindow); // make the window visible
 
 	/* Although X11 does have a CreateNotify event, it's mainly meant
 	   for detecting the creation of child windows, so we do our
@@ -349,11 +353,17 @@ main (int argc, char *argv[])
 	XFree (myvisinfo);
 	glXMakeCurrent (mydisplay, mywindow, hRC);
 
+	XMapRaised (mydisplay, mywindow); // make the window visible
+
 	g_glRender = new GfxOpenGL;
 	g_rubiksCube = new RubiksCube;
 
 	if (!g_glRender->Init ())
 		goto cleanup;
+	/* When running without a window manager, we will not get an
+	   initial ConfigureNotify event.  So, call `SetupProjection ()'
+	   here to guarantee that it happens.  */
+	g_glRender->SetupProjection (myhint.width, myhint.height);
 
 	g_rubiksCube->Init ();
 
