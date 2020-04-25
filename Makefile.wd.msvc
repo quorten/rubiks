@@ -1,3 +1,17 @@
-# Windows-dependent makefile for MSVC.
-!include "msvc.wd.defs"
+# Windows-dependent -*- makefile -*- definitions for MSVC.
+O = .obj
+RCO = .res
+ALLDEPS = $**
+CXX = cl
+CXXOUT = -Fo
+WINDRES = rc -r
+RESOUT = -fo
+LINK = link
+LDOUT = -out:
+CFLAGS = -nologo
+LDFLAGS = -nologo -subsystem:windows
+GUILIBS = kernel32.lib user32.lib gdi32.lib
+LIBS = $(GUILIBS) opengl32.lib glu32.lib winmm.lib
+RMF = del
+
 !include "Makefile.wd.in"

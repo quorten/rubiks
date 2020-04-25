@@ -1,3 +1,17 @@
-# Windows-dependent makefile for MinGW.
-include mingw.wd.defs
+# Windows-dependent -*- makefile -*- definitions for MinGW.
+CROSS = i686-w64-mingw32-
+O = .o
+RCO = -rc.o
+ALLDEPS = $^
+CXX = $(CROSS)g++
+CXXOUT = -o
+WINDRES = $(CROSS)windres -O coff
+RESOUT = -o
+LINK = $(CROSS)g++
+LDOUT = -o
+CFLAGS =
+LDFLAGS = -mwindows -static-libgcc -static-libstdc++
+LIBS = -lopengl32 -lglu32 -lwinmm
+RMF = rm -f
+
 include Makefile.wd.in
