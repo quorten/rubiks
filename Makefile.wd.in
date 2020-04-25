@@ -3,21 +3,25 @@
 all: Rubiks.exe
 
 .cpp$(O):
-	$(CXX) $(CFLAGS) -D _WINDOWS -c $< -o $@
+	$(CXX) $(CFLAGS) -D _WINDOWS $(CXXOUT)$@ -c $<
 
 winmain$(O): winmain.cpp Vector.h GfxOpenGL.h Rubiks.h
 GfxOpenGL$(O): GfxOpenGL.cpp Vector.h Plane.h GfxOpenGL.h Rubiks.h
 Rubiks$(O): Rubiks.cpp Vector.h GfxOpenGL.h Rubiks.h
 
 Rubiks$(RCO): Rubiks.rc
-	$(WINDRES) $(RESOUT) $@ Rubiks.rc
+	$(WINDRES) $(RESOUT)$@ Rubiks.rc
 
 Rubiks.exe: winmain$(O) GfxOpenGL$(O) Rubiks$(O) Rubiks$(RCO)
-	$(LINK) $(LDFLAGS) $(LDO)$@ $(ALLDEPS) $(LIBS)
+	$(LINK) $(LDFLAGS) $(LDOUT)$@ $(ALLDEPS) $(LIBS)
 
 mostlyclean:
 	$(RMF) *$(O)
 	$(RMF) *$(RCO)
+	# Clean up MSVC debugging files, etc.
+	$(RMF) *.pdb
+	$(RMF) *.ilk
+	$(RMF) *.idb
 
 clean: mostlyclean
 	$(RMF) Rubiks.exe
