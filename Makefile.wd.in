@@ -18,7 +18,7 @@ Rubiks.exe: winmain$(O) GfxOpenGL$(O) Rubiks$(O) Rubiks$(RCO)
 mostlyclean:
 	$(RMF) *$(O)
 	$(RMF) *$(RCO)
-	# Clean up MSVC debugging files, etc.
+# Clean up MSVC debugging files, etc.
 	$(RMF) *.pdb
 	$(RMF) *.ilk
 	$(RMF) *.idb
