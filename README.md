@@ -14,8 +14,8 @@ dependencies you want to use:
   version of Windows newer than Windows 3.1.
 
   Use `make -f Makefile.wd.mingw CROSS=i686-w64-mingw32-` to compile
-  and set the CROSS variable accordingly for cross-compiling (or empty
-  for native compiling).
+  and set the CROSS variable according to the toolchain prefix for
+  cross-compiling (or empty for native compiling).
 
   For your entertainment, retro fans, there is also support for
   compiling with MSVC++ 6.  Use `nmake -f Makefile.wd.msvc` to
